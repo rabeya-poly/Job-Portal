@@ -2,16 +2,20 @@ import Lottie from 'lottie-react';
 import React, { useContext } from 'react';
 import loginAnimationData from '../../assets/lottie/login.json'
 import AuthContext from '../../context/AuthContext/AuthContext';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
     const {signInUser} = useContext(AuthContext);
-
+    const location = useLocation();
+    const navigate = useNavigate();
+    console.log('in signin page',location);
+    const from  = location.state || '/';
 
     const handleSignIn = e =>{
         e.preventDefault();
-        const from =e.target;
-        const email = from.email.value;
-        const password = from.password.value;
+        const form =e.target;
+        const email = form.email.value;
+        const password = form.password.value;
         console.log(email,password);
         //password
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
@@ -41,6 +45,7 @@ const SignIn = () => {
     signInUser(email,password)
      .then(result=>{
         console.log(result.user);
+        navigate(from)
      })
      .catch(error =>{
         console.log(error.message);
